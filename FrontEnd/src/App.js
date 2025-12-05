@@ -5,12 +5,7 @@ import './App.css';
 function App() {
   const [parts, setParts] = useState([]);
   const [form, setForm] = useState({ partName: '', quantity: '', status: 'In Stock' });
-  const [loading, setLoading] = useState(true);
-
-  // --- STEP 1: DEFINE YOUR BACKEND URL ---
-  // If you are running locally, use 'http://localhost:5000'
-  // If you are deploying to Vercel, use your Render URL: 'https://kia-backend.onrender.com'
-  const API_URL = "YOUR_RENDER_URL_HERE"; 
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     fetchParts();
@@ -18,13 +13,13 @@ function App() {
 
   const fetchParts = async () => {
     try {
-      // Use the API_URL variable instead of just '/api/parts'
-      const res = await axios.get(`${API_URL}/api/parts`); 
+      // FIX 1: Removed "http://localhost:5000" (The proxy handles it now)
+      const res = await axios.get('/api/parts'); 
       setParts(res.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
-      alert("Error: Could not connect to Backend.");
+      alert("Error: Could not connect to Backend. Is 'node server.js' running?");
       setLoading(false);
     }
   };
@@ -34,7 +29,8 @@ function App() {
     if(!form.partName || !form.quantity) return alert("Please fill all fields");
     
     try {
-      await axios.post(`${API_URL}/api/parts`, form);
+      // FIX 2: Relative path here too
+      await axios.post('/api/parts', form);
       setForm({ partName: '', quantity: '', status: 'In Stock' }); 
       fetchParts(); 
     } catch (error) {
@@ -45,7 +41,8 @@ function App() {
   const handleDelete = async (id) => {
     if(window.confirm("Confirm delete?")) {
       try {
-        await axios.delete(`${API_URL}/api/parts/${id}`);
+        // FIX 3: Ensure you use BACKTICKS (`) not single quotes (')
+        await axios.delete(`/api/parts/${id}`);
         fetchParts();
       } catch (error) {
         alert("Failed to delete.");
