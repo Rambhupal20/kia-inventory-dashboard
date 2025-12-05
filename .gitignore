@@ -1,0 +1,12 @@
+# Ignore dependencies
+node_modules/
+/FrontEnd/node_modules/
+/BackEnd/node_modules/
+/server/node_modules/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables (security)
+.env
